@@ -194,7 +194,7 @@ type remoteSealer struct {
 	works        map[common.Hash]*types.Block
 	rates        map[common.Hash]hashrate
 	currentBlock *types.Block
-	currentWork  [9]string
+	currentWork  [10]string
 	notifyCtx    context.Context
 	cancelNotify context.CancelFunc // cancels all notification requests
 	reqWG        sync.WaitGroup     // tracks notification request goroutines
@@ -239,7 +239,7 @@ type hashrate struct {
 // sealWork wraps a seal work package for remote sealer.
 type sealWork struct {
 	errc chan error
-	res  chan [9]string
+	res  chan [10]string
 }
 
 func startRemoteSealer(ethash *Ethash, urls []string, noverify bool) *remoteSealer {
@@ -397,7 +397,7 @@ func (s *remoteSealer) notifyWork() {
 	}
 }
 
-func (s *remoteSealer) sendNotification(ctx context.Context, url string, json []byte, work [9]string) {
+func (s *remoteSealer) sendNotification(ctx context.Context, url string, json []byte, work [10]string) {
 	defer s.reqWG.Done()
 
 	req, err := http.NewRequest("POST", url, bytes.NewReader(json))

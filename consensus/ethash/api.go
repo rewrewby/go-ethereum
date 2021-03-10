@@ -43,25 +43,25 @@ type API struct {
 //   result[6], hex encoded gas used
 //   result[7], hex encoded transaction count
 //   result[8], hex encoded uncle count
-func (api *API) GetWork() ([9]string, error) {
+func (api *API) GetWork() ([10]string, error) {
 	if api.ethash.remote == nil {
-		return [9]string{}, errors.New("not supported")
+		return [10]string{}, errors.New("not supported")
 	}
 
 	var (
-		workCh = make(chan [9]string, 1)
+		workCh = make(chan [10]string, 1)
 		errc   = make(chan error, 1)
 	)
 	select {
 	case api.ethash.remote.fetchWorkCh <- &sealWork{errc: errc, res: workCh}:
 	case <-api.ethash.remote.exitCh:
-		return [9]string{}, errEthashStopped
+		return [10]string{}, errEthashStopped
 	}
 	select {
 	case work := <-workCh:
 		return work, nil
 	case err := <-errc:
-		return [9]string{}, err
+		return [10]string{}, err
 	}
 }
 
